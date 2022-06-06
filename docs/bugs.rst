@@ -3,82 +3,67 @@
 .. _known_bugs:
 
 ##################
-List of Known Bugs
+알려진 버그들
 ##################
 
-Below, you can find a JSON-formatted list of some of the known security-relevant bugs in the
-Solidity compiler. The file itself is hosted in the `Github repository
-<https://github.com/ethereum/solidity/blob/develop/docs/bugs.json>`_.
-The list stretches back as far as version 0.3.0, bugs known to be present only
-in versions preceding that are not listed.
+아래에 솔리디티 컴파일러에서 발견된 몇 가지 JSON 형태의 보안 관련 버그들을 찾아보실 수 있습니다.
+파일들은 `Github 레포지토리
+<https://github.com/ethereum/solidity/blob/develop/docs/bugs.json>`_에서 호스팅되고 있습니다.
+목록은 최대 버전 0.3.0까지 적용이 되며, 버그는 목록에 나와있지 않은 이전 버전에서만 발견되고 있습니다. 
 
-There is another file called `bugs_by_version.json
-<https://github.com/ethereum/solidity/blob/develop/docs/bugs_by_version.json>`_,
-which can be used to check which bugs affect a specific version of the compiler.
+`bugs_by_version.json
+<https://github.com/ethereum/solidity/blob/develop/docs/bugs_by_version.json>`_라고 하는 또다른 파일이 있는데,
+이는 어떤 버그가 특정 버전의 컴파일러에 영향을 미치는지 확인해주는 역할을 수행합니다.
 
-Contract source verification tools and also other tools interacting with
-contracts should consult this list according to the following criteria:
+컨트랙트 소스 인증 툴과 컨트랙트와 상호작용하는 또다른 툴들은 다음 기준에 따라 목록을 consult합니다.
 
-- It is mildly suspicious if a contract was compiled with a nightly
-  compiler version instead of a released version. This list does not keep
-  track of unreleased or nightly versions.
-- It is also mildly suspicious if a contract was compiled with a version that was
-  not the most recent at the time the contract was created. For contracts
-  created from other contracts, you have to follow the creation chain
-  back to a transaction and use the date of that transaction as creation date.
-- It is highly suspicious if a contract was compiled with a compiler that
-  contains a known bug and the contract was created at a time where a newer
-  compiler version containing a fix was already released.
+- 컨트랙트가 릴리즈된 버전이 아닌 nightly 컴파일러 버전으로 컴파일 되었다면 의심해볼만 합니다.
+  해당 목록은 릴리즈되지 않은 버전 혹은 nightly 버전을 추적하지 않습니다.
+- 컨트랙트가 생성될 당시의 가장 최신 버전으로 컴파일이 되지 않았다면 또한 의심해볼만 합니다. 
+  다른 컨트랙트에서 생성된 컨트랙트일 경우, 트랜잭션을 추적하여 creation chain을 따라야 하며, 
+  해당 트랜잭션의 날짜를 생성 날짜로 삼아야 합니다. 
+- 만일 컨트랙트가 알려진 버그를 포함하는 컴파일러로 컴파일 되었거나
+  이미 릴리즈된 fix를 포함하는 더 새로운 버전의 컴파일러로 생성되었다면,
+  이는 상당히 의심스러울 수 있습니다. 
 
-The JSON file of known bugs below is an array of objects, one for each bug,
-with the following keys:
+다음 알려진 버그들의 JSON 파일은 객체의 배열 형태로 되어 있으며, 각 키 별로 해당 버그가 명시되어 있습니다.
 
 uid
-    Unique identifier given to the bug in the form of ``SOL-<year>-<number>``.
-    It is possible that multiple entries exists with the same uid. This means
-    multiple version ranges are affected by the same bug.
+    ``SOL-<year>-<number>`` 형태로 버그에 부여된 고유 식별자입니다.
+    동일한 uid로 이루어진 다양한 entry가 있을 수 있습니다. 
+    이는 다양한 버전들이 동일한 버그에 의해 영향을 받을 수도 있다는 뜻입니다.
 name
-    Unique name given to the bug
+    버그의 고유 이름입니다.
 summary
-    Short description of the bug
+    버그에 대한 간략한 설명입니다.
 description
-    Detailed description of the bug
+    버그에 대한 자세한 설명입니다.
 link
-    URL of a website with more detailed information, optional
+    자세한 정보가 있는 웹사이트의 URL입니다. (선택적) 
 introduced
-    The first published compiler version that contained the bug, optional
+    버그를 포함한 첫번째로 배포된 컴파일러 버전을 가리킵니다. (선택적)
 fixed
-    The first published compiler version that did not contain the bug anymore
+    버그를 더 이상 포함하지 않는 첫번째로 배포된 컴파일러 버전을 가리킵니다.
 publish
-    The date at which the bug became known publicly, optional
+    버그가 공식적으로 공개된 날짜입니다. (선택적)
 severity
-    Severity of the bug: very low, low, medium, high. Takes into account
-    discoverability in contract tests, likelihood of occurrence and
-    potential damage by exploits.
+    버그의 심각성입니다. 매우 낮음, 낮음, 중간, 높음으로 구성되어 있습니다.
+    컨트랙트 테스트에서 발견되는 정도, 발생 빈번도 및 잠재적 위험 등을 평가 지표로 삼습니다.
 conditions
-    Conditions that have to be met to trigger the bug. The following
-    keys can be used:
-    ``optimizer``, Boolean value which
-    means that the optimizer has to be switched on to enable the bug.
-    ``evmVersion``, a string that indicates which EVM version compiler
-    settings trigger the bug. The string can contain comparison
-    operators. For example, ``">=constantinople"`` means that the bug
-    is present when the EVM version is set to ``constantinople`` or
-    later.
-    If no conditions are given, assume that the bug is present.
+    버그를 발생시키기 위한 조건들입니다. 다음 key들이 사용될 수 있습니다.
+    ``optimizer``: 버그를 발생시키기 위해 optimizer가 켜져 있어야 함을 가리키는 Boolean값입니다. 
+    ``evmVersion``: 버그를 발생시키는 EVM 컴파일러 버전의 string값입니다. string은 비교 연산자를 포함할 수 있습니다. 
+    예를 들어, ``">=constantinople"``는 ``constantinople`` 혹은 그 이후의 EVM 버전에서 버그가 있을 수 있음을
+    뜻합니다. 
 check
-    This field contains different checks that report whether the smart contract
-    contains the bug or not. The first type of check are Javascript regular
-    expressions that are to be matched against the source code ("source-regex")
-    if the bug is present.  If there is no match, then the bug is very likely
-    not present. If there is a match, the bug might be present.  For improved
-    accuracy, the checks should be applied to the source code after stripping
-    comments.
-    The second type of check are patterns to be checked on the compact AST of
-    the Solidity program ("ast-compact-json-path"). The specified search query
-    is a `JsonPath <https://github.com/json-path/JsonPath>`_ expression.
-    If at least one path of the Solidity AST matches the query, the bug is
-    likely present.
+    스마트 컨트랙트가 버그를 포함하는지의 유무를 판독하는 다양한 체크 포인트를 포함하고 있습니다.
+    그 중 첫번째는 버그가 존재할 시 소스 코드("source-regex")와 일치하여야 하는 Javascript의 정규표현식입니다.
+    만일 일치하지 않는다면 버그가 존재할 확률은 매우 희박합니다. 
+    만일 일치한다면 버그가 존재할 확률이 있습니다. 
+    더욱 높은 정확도를 위하여 주석을 해제한 후 소스 코드에 해당 체크 코드를 실행시켜 보시기 바랍니다.
+    두번째는 솔리디티 프로그램의 compact AST("ast-compact-json-path") 상에서 체크되어야 하는 패턴들입니다.
+    search query는 `JsonPath <https://github.com/json-path/JsonPath>`_ 표현식으로 되어 있습니다.
+    만일 최소 한 개 이상의 솔리디티 AST path가 query와 일치한다면, 버그가 존재할 가능성이 있습니다. 
 
 .. literalinclude:: bugs.json
    :language: js
